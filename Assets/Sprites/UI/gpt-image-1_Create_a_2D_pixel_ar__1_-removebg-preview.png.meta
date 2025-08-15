@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 82e6dadc6897f654199b685a1468789f
+guid: 3aa70068ca683544082861c6d7b62e6f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -45593718130316725
-    second: output-onlinepngtools (20)_0
+      213: -595429817944216434
+    second: gpt-image-1_Create_a_2D_pixel_ar__1_-removebg-preview_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: output-onlinepngtools (20)_0
+      name: gpt-image-1_Create_a_2D_pixel_ar__1_-removebg-preview_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 512
-        height: 512
+        x: 29
+        y: 122
+        width: 442
+        height: 337
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b4a6ad241c40e5ff0800000000000000
-      internalID: -45593718130316725
+      spriteID: e8c62cc3cbb9cb7f0800000000000000
+      internalID: -595429817944216434
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      output-onlinepngtools (20)_0: -45593718130316725
+      gpt-image-1_Create_a_2D_pixel_ar__1_-removebg-preview_0: -595429817944216434
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

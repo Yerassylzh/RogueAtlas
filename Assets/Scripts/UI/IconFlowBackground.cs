@@ -19,35 +19,38 @@ public class IconFlowBackground : MonoBehaviour
     private int gridHeight;
     private float screenWidth;
     private float screenHeight;
+    private float previousScreenWidth;
+    private float previousScreenHeight;
 
     void Awake()
     {
         CalculateGridDimensions();
+        // Store initial screen dimensions
+        previousScreenWidth = screenWidth;
+        previousScreenHeight = screenHeight;
         SpawnIcons();
         currentOffset = Vector2.zero;
     }
 
     void Update()
     {
+        CheckForScreenSizeChange();
         MoveBg();
     }
 
     void CalculateGridDimensions()
     {
-        // Get screen dimensions from canvas
         Canvas canvas = GetComponentInParent<Canvas>();
         RectTransform canvasRect = canvas.GetComponent<RectTransform>();
         screenWidth = canvasRect.rect.width;
         screenHeight = canvasRect.rect.height;
 
-        // Calculate how many icons we need to fill screen + overflow
         gridWidth = Mathf.CeilToInt((screenWidth + overflowPixels * 2) / iconSize) + 2;
         gridHeight = Mathf.CeilToInt((screenHeight + overflowPixels * 2) / iconSize) + 2;
     }
 
     void SpawnIcons()
     {
-        // Calculate starting position (top-left with overflow)
         float startX = -screenWidth / 2 - overflowPixels;
         float startY = screenHeight / 2 + overflowPixels;
 
@@ -58,15 +61,12 @@ public class IconFlowBackground : MonoBehaviour
                 GameObject icon = Instantiate(iconPrefab, transform);
                 RectTransform iconRect = icon.GetComponent<RectTransform>();
 
-                // Set anchor and pivot to center for easier positioning
                 iconRect.anchorMin = new Vector2(0.5f, 0.5f);
                 iconRect.anchorMax = new Vector2(0.5f, 0.5f);
                 iconRect.pivot = new Vector2(0.5f, 0.5f);
 
-                // Set size
                 iconRect.sizeDelta = new Vector2(iconSize, iconSize);
 
-                // Calculate position
                 float posX = startX + col * iconSize + iconSize / 2;
                 float posY = startY - row * iconSize - iconSize / 2;
 
@@ -74,9 +74,44 @@ public class IconFlowBackground : MonoBehaviour
                 iconRect.anchoredPosition = basePosition;
 
                 iconTransforms.Add(iconRect);
-                iconBasePositions.Add(basePosition); // Store the original position
+                iconBasePositions.Add(basePosition);
             }
         }
+    }
+
+    void CheckForScreenSizeChange()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        float currentScreenWidth = canvasRect.rect.width;
+        float currentScreenHeight = canvasRect.rect.height;
+
+        if (!Mathf.Approximately(currentScreenWidth, previousScreenWidth) ||
+            !Mathf.Approximately(currentScreenHeight, previousScreenHeight))
+        {
+            RemoveAllIcons();
+            CalculateGridDimensions();
+            SpawnIcons();
+
+            currentOffset = Vector2.zero;
+
+            previousScreenWidth = screenWidth;
+            previousScreenHeight = screenHeight;
+        }
+    }
+
+    void RemoveAllIcons()
+    {
+        for (int i = 0; i < iconTransforms.Count; i++)
+        {
+            if (iconTransforms[i] != null)
+            {
+                DestroyImmediate(iconTransforms[i].gameObject);
+            }
+        }
+
+        iconTransforms.Clear();
+        iconBasePositions.Clear();
     }
 
     void MoveBg()
@@ -86,10 +121,8 @@ public class IconFlowBackground : MonoBehaviour
 
         currentOffset += movement;
 
-        // Check if we've moved a full icon size in both directions
         if (currentOffset.x >= iconSize && Mathf.Abs(currentOffset.y) >= iconSize)
         {
-            // Reset offset by exactly one icon size
             currentOffset.x -= iconSize;
             currentOffset.y += iconSize; // Add because we're moving in negative Y
         }
